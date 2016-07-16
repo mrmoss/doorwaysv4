@@ -44,8 +44,8 @@ html,head,body
 	position:relative;
 	top:0px;
 	width:100%;
-	height:36px;
-	line-height:36px;
+	height:54px;
+	line-height:54px;
 	cursor:move;
 }
 
@@ -61,7 +61,7 @@ html,head,body
 
 .doorway_bar_text
 {
-	margin-left:5px;
+	margin-left:16px;
 	margin-right:60px;
 	overflow:hidden;
 	font-family:Sans-serif;
@@ -75,8 +75,8 @@ html,head,body
 	position:absolute;
 	top:0px;
 	right:0px;
-	margin-right:5px;
-	margin-top:7px;
+	margin-right:20px;
+	margin-top:14px;
 	padding:0px;
 	width:22px;
 	height:22px;
@@ -109,8 +109,8 @@ html,head,body
 	position:absolute;
 	background-color:green;
 	opacity:0;
-	width:12px;
-	height:12px;
+	width:20px;
+	height:20px;
 }
 
 .resizer_n
@@ -121,28 +121,12 @@ html,head,body
 	width:100%;
 }
 
-.resizer_ne
-{
-	cursor:nesw-resize;
-	top:0px;
-	right:0px;
-	background-color:purple;
-}
-
 .resizer_e
 {
 	cursor:ew-resize;
 	top:0px;
 	right:0px;
 	height:100%;
-}
-
-.resizer_se
-{
-	cursor:nwse-resize;
-	bottom:0px;
-	right:0px;
-	background-color:purple;
 }
 
 .resizer_s
@@ -153,20 +137,36 @@ html,head,body
 	width:100%;
 }
 
-.resizer_sw
-{
-	cursor:nesw-resize;
-	bottom:0px;
-	left:0px;
-	background-color:purple;
-}
-
 .resizer_w
 {
 	cursor:ew-resize;
 	top:0px;
 	left:0px;
 	height:100%;
+}
+
+.resizer_ne
+{
+	cursor:nesw-resize;
+	top:0px;
+	right:0px;
+	background-color:purple;
+}
+
+.resizer_se
+{
+	cursor:nwse-resize;
+	bottom:0px;
+	right:0px;
+	background-color:purple;
+}
+
+.resizer_sw
+{
+	cursor:nesw-resize;
+	bottom:0px;
+	left:0px;
+	background-color:purple;
 }
 
 .resizer_nw
