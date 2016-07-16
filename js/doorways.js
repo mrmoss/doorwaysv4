@@ -224,7 +224,6 @@ doorway_t.prototype.set_active=function(active)
 		this.bar.className="doorway_bar doorway_bar_active";
 		for(var key in this.buttons)
 			this.buttons[key].className="doorway_bar_button doorway_bar_button_active";
-		this.win.style.zIndex=99;
 	}
 	else
 	{
@@ -357,6 +356,7 @@ doorway_t.prototype.down_m=function(event)
 {
 	if(!this.down_offset)
 	{
+		event.preventDefault();
 		this.down_offset=utils.get_event_pos(event);
 		var offset=utils.get_el_pos(this.win);
 		this.down_offset.x-=offset.x;

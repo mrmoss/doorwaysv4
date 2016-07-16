@@ -62,6 +62,7 @@ resizer_t.prototype.removeEventListener=function(listener,callback)
 //Mouse/touch down event listener.
 resizer_t.prototype.down_m=function(event)
 {
+	event.preventDefault();
 	for(var key in this.event_listeners.down)
 		this.event_listeners.down[key](event);
 	this.down_offset=utils.get_event_pos(event);

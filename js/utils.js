@@ -22,7 +22,7 @@ utils_t.prototype.copy=function(obj)
 utils_t.prototype.get_event_pos=function(event)
 {
 	var pos=null;
-	if(event.touches&&event.touches.size==1)
+	if(event.touches&&event.touches.length==1)
 		pos={x:event.touches[0].pageX,y:event.touches[0].pageY};
 	else
 		pos={x:event.pageX,y:event.pageY};
