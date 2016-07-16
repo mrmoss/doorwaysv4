@@ -1,0 +1,171 @@
+html,head,body
+{
+	width:500px;
+	height:410px;
+	margin:0px;
+	padding:0px;
+}
+
+.fill
+{
+	margin:0px;
+	padding:0px;
+	position:absolute;
+	top:50px;
+	left:50px;
+	width:400px;
+	height:400px;
+	outline:1px solid black;
+}
+
+.doorway_win
+{
+	position:absolute;
+	background-color:white;
+	border-radius:5px;
+	overflow:hidden;
+}
+
+.doorway_win_inactive
+{
+	color:rgb(100,100,100);
+	-webkit-box-shadow:inset 0 0 0 1px rgb(220,220,220);
+	-moz-box-shadow:   inset 0 0 0 1px rgb(220,220,220);
+	box-shadow:        inset 0 0 0 1px rgb(220,220,220);
+}
+
+.doorway_win_active
+{
+	color:rgb(255,255,255);
+	-webkit-box-shadow:inset 0 0 0 1px rgb(50,100,250);
+	-moz-box-shadow:   inset 0 0 0 1px rgb(50,100,250);
+	box-shadow:        inset 0 0 0 1px rgb(50,100,250);
+}
+
+.doorway_bar
+{
+	position:absolute;
+	top:0px;
+	width:100%;
+	height:32px;
+	line-height:32px;
+	cursor:move;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+}
+
+.doorway_bar_inactive
+{
+	background-color:rgb(220,220,220);
+}
+
+.doorway_bar_active
+{
+	background-color:rgb(50,100,250);
+}
+
+.doorway_bar_text
+{
+	margin-left:5px;
+	margin-right:60px;
+	overflow:hidden;
+	font-family:Sans-serif;
+}
+
+.doorway_bar_button
+{
+	position:absolute;
+	top:0px;
+	right:0px;
+	margin-right:5px;
+	margin-top:5px;
+	padding:0px;
+	width:22px;
+	height:22px;
+	float:right;
+	cursor:pointer;
+	border:0px;
+	border-radius:5px;
+	color:rgb(255,255,255);
+	background-color:rgb(50,100,250);
+}
+
+.doorway_bar_button:hover
+{
+	color:rgb(100,100,100);
+	background-color:rgb(220,220,220);
+}
+
+.resizer
+{
+	position:absolute;
+	background-color:green;
+	opacity:0;
+	width:8px;
+	height:8px;
+}
+
+.resizer_n
+{
+	cursor:ns-resize;
+	top:0px;
+	left:0px;
+	width:100%;
+}
+
+.resizer_ne
+{
+	cursor:nesw-resize;
+	top:0px;
+	right:0px;
+	background-color:purple;
+}
+
+.resizer_e
+{
+	cursor:ew-resize;
+	top:0px;
+	right:0px;
+	height:100%;
+}
+
+.resizer_se
+{
+	cursor:nwse-resize;
+	bottom:0px;
+	right:0px;
+	background-color:purple;
+}
+
+.resizer_s
+{
+	cursor:ns-resize;
+	bottom:0px;
+	left:0px;
+	width:100%;
+}
+
+.resizer_sw
+{
+	cursor:nesw-resize;
+	bottom:0px;
+	left:0px;
+	background-color:purple;
+}
+
+.resizer_w
+{
+	cursor:ew-resize;
+	top:0px;
+	left:0px;
+	height:100%;
+}
+
+.resizer_nw
+{
+	cursor:nwse-resize;
+	top:0px;
+	left:0px;
+	background-color:purple;
+}

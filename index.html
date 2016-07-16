@@ -1,0 +1,33 @@
+<html>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+	<meta name="HandheldFriendly" content="true"/>
+	<head>
+		<link rel="stylesheet" href="css/doorways.css">
+
+		<div id="constrain" class="fill"></div>
+
+		<script src="js/doorways.js"></script>
+		<script src="js/resizer.js"></script>
+		<script src="js/utils.js"></script>
+		<script>
+			var constrain=document.getElementById("constrain");
+
+			var test=new doorway_t(constrain,
+			{
+				title:"Test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+				size:
+				{
+					w:200,
+					h:200
+				},
+				pos:
+				{
+					x:10,
+					y:10
+				}
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
