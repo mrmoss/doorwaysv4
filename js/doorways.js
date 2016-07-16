@@ -14,8 +14,8 @@ function doorway_t(constrain,options)
 	this.constrain=constrain;
 	this.min_size=
 	{
-		w:100,
-		h:100
+		w:200,
+		h:200
 	};
 	this.active=false;
 	this.minimized=false;
@@ -40,6 +40,31 @@ function doorway_t(constrain,options)
 	this.make_button_m("?",function(){alert("HELP! "+_this.title);});
 
 	//Event listeners...
+	this.resize_ev_m=function()
+	{
+		//Move and resize.
+		_this.load(_this.save());
+
+		//Get current size and parent's size.
+		var save=_this.save();
+		var parent_size=utils.get_el_size(this.constrain);
+
+		//Constrain.
+		if(save.pos.x<0)
+			save.pos.x=0;
+		if(save.pos.y<0)
+			save.pos.y=0;
+		if(save.size.w>parent_size.w)
+			save.size.w=parent_size.w;
+		if(save.size.h>parent_size.h)
+			save.size.h=parent_size.h;
+
+		//Do it again.
+		_this.move(save.pos);
+		_this.resize(save.size);
+		_this.move(save.pos);
+	};
+	window.addEventListener("resize",this.resize_ev_m);
 	this.bar.addEventListener("mousedown",function(event){_this.down_m(event);});
 	this.bar.addEventListener("touchstart",function(event){_this.down_m(event);});
 	this.move_ev_m=function(event){_this.move_m(event);};
@@ -110,6 +135,7 @@ doorway_t.prototype.destroy=function()
 	{
 		this.constrain.removeChild(this.win);
 		this.constrain=null;
+		window.removeEventListener("resize",this.resize_ev_m);
 		window.removeEventListener("mousemove",this.move_ev_m);
 		window.removeEventListener("touchmove",this.move_ev_m);
 		window.removeEventListener("mouseup",this.up_ev_m);
@@ -204,10 +230,10 @@ doorway_t.prototype.resize=function(size)
 		size_copy.w=this.min_size.w;
 	if(!size_copy.h||size_copy.h<this.min_size.h)
 		size_copy.h=this.min_size.h;
-	if(size_copy.w>parent_size.w-pos.x)
-		size_copy.w=parent_size.w-pos.x;
-	if(size_copy.h>parent_size.h-pos.y)
-		size_copy.h=parent_size.h-pos.y;
+	if(size_copy.w>parent_size.w-Math.min(0,pos.x))
+		size_copy.w=parent_size.w-Math.min(0,pos.x);
+	if(size_copy.h>parent_size.h-Math.min(0,pos.y))
+		size_copy.h=parent_size.h-Math.min(0,pos.y);
 
 	//Resize.
 	this.win.style.width=size_copy.w+"px";
@@ -224,6 +250,7 @@ doorway_t.prototype.set_active=function(active)
 		this.bar.className="doorway_bar doorway_bar_active";
 		for(var key in this.buttons)
 			this.buttons[key].className="doorway_bar_button doorway_bar_button_active";
+		this.win.style.zIndex="";
 	}
 	else
 	{
@@ -293,6 +320,10 @@ doorway_t.prototype.grow_right_m=function(pos,resizer)
 	var handle_size=utils.get_el_size(resizer.handle);
 	var size=utils.get_el_size(this.win);
 	size.w+=pos-resizer.down_offset.x+handle_size.w-size.w;
+	var pos=utils.get_el_pos(this.win);
+	var parent_size=utils.get_el_size(this.constrain);
+	if(size.w>parent_size.w-pos.x)
+		size.w=parent_size.w-pos.x;
 	this.resize(size);
 }
 
@@ -302,6 +333,10 @@ doorway_t.prototype.grow_bottom_m=function(pos,resizer)
 	var handle_size=utils.get_el_size(resizer.handle);
 	var size=utils.get_el_size(this.win);
 	size.h+=pos-resizer.down_offset.y+handle_size.h-size.h;
+	var parent_size=utils.get_el_size(this.constrain);
+	var pos=utils.get_el_pos(this.win);
+	if(size.h>parent_size.h-pos.y)
+		size.h=parent_size.h-pos.y;
 	this.resize(size);
 }
 
