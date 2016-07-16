@@ -27,53 +27,6 @@ function doorway_t(constrain,options)
 	this.bar=document.createElement("div");
 	this.win.appendChild(this.bar);
 
-	//Set title.
-	this.bar_text=document.createElement("div");
-	this.bar.appendChild(this.bar_text);
-	this.bar_text.innerHTML=this.title="";
-	this.bar_text.className="doorway_bar_text";
-
-	//Make buttons.
-	this.button_offset=0;
-	this.buttons=[];
-	this.make_button_m("X",function(){_this.set_minimized(true);});
-	this.make_button_m("?",function(){alert("HELP! "+_this.title);});
-
-	//Event listeners...
-	this.resize_ev_m=function()
-	{
-		//Move and resize.
-		_this.load(_this.save());
-
-		//Get current size and parent's size.
-		var save=_this.save();
-		var parent_size=utils.get_el_size(this.constrain);
-
-		//Constrain.
-		if(save.pos.x<0)
-			save.pos.x=0;
-		if(save.pos.y<0)
-			save.pos.y=0;
-		if(save.size.w>parent_size.w)
-			save.size.w=parent_size.w;
-		if(save.size.h>parent_size.h)
-			save.size.h=parent_size.h;
-
-		//Do it again.
-		_this.move(save.pos);
-		_this.resize(save.size);
-		_this.move(save.pos);
-	};
-	window.addEventListener("resize",this.resize_ev_m);
-	this.bar.addEventListener("mousedown",function(event){_this.down_m(event);});
-	this.bar.addEventListener("touchstart",function(event){_this.down_m(event);});
-	this.move_ev_m=function(event){_this.move_m(event);};
-	window.addEventListener("mousemove",this.move_ev_m);
-	window.addEventListener("touchmove",this.move_ev_m);
-	this.up_ev_m=function(event){_this.up_m(event);};
-	window.addEventListener("mouseup",this.up_ev_m);
-	window.addEventListener("touchend",this.up_ev_m);
-
 	//Create resizers.
 	this.resizers=
 	{
@@ -122,6 +75,55 @@ function doorway_t(constrain,options)
 			_this.set_active(true);
 		});
 
+	//Set title.
+	this.bar_text=document.createElement("div");
+	this.bar.appendChild(this.bar_text);
+	this.bar_text.innerHTML=this.title="";
+	this.bar_text.className="doorway_bar_text";
+
+	//Make buttons.
+	this.button_offset=0;
+	this.buttons=[];
+	this.make_button_m("X",function(){_this.set_minimized(true);});
+	this.make_button_m("?",function(){alert("HELP! "+_this.title);});
+
+	//Event listeners...
+	this.resize_ev_m=function()
+	{
+		//Move and resize.
+		_this.load(_this.save());
+
+		//Get current size and parent's size.
+		var save=_this.save();
+		var parent_size=utils.get_el_size(this.constrain);
+
+		//Constrain.
+		if(save.pos.x<0)
+			save.pos.x=0;
+		if(save.pos.y<0)
+			save.pos.y=0;
+		if(save.size.w>parent_size.w)
+			save.size.w=parent_size.w;
+		if(save.size.h>parent_size.h)
+			save.size.h=parent_size.h;
+
+		//Do it again.
+		_this.move(save.pos);
+		_this.resize(save.size);
+		_this.move(save.pos);
+	};
+
+	window.addEventListener("resize",this.resize_ev_m);
+	this.bar.addEventListener("mousedown",function(event){_this.down_m(event);});
+	this.bar.addEventListener("touchstart",function(event){_this.down_m(event);});
+	this.move_ev_m=function(event){_this.move_m(event);};
+	window.addEventListener("mousemove",this.move_ev_m);
+	window.addEventListener("touchmove",this.move_ev_m);
+	this.up_ev_m=function(event){_this.up_m(event);};
+	window.addEventListener("mouseup",this.up_ev_m);
+	window.addEventListener("touchend",this.up_ev_m);
+
+	//Load to actually move and resize.
 	this.load(options);
 };
 
