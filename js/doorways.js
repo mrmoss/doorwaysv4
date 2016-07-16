@@ -30,38 +30,38 @@ function doorway_t(constrain,options)
 	//Create resizers.
 	this.resizers=
 	{
-		n:new resizer_t(this.win,"resizer resizer_n",function(change)
+		n:new resizer_t(this.win,"resizer n",function(change)
 		{
 			_this.grow_top_m(change.y,_this.resizers.n);
 		}),
-		e:new resizer_t(this.win,"resizer resizer_e",function(change)
+		e:new resizer_t(this.win,"resizer e",function(change)
 		{
 			_this.grow_right_m(change.x,_this.resizers.e);
 		}),
-		s:new resizer_t(this.win,"resizer resizer_s",function(change)
+		s:new resizer_t(this.win,"resizer s",function(change)
 		{
 			_this.grow_bottom_m(change.y,_this.resizers.s);
 		}),
-		w:new resizer_t(this.win,"resizer resizer_w",function(change)
+		w:new resizer_t(this.win,"resizer w",function(change)
 		{
 			_this.grow_left_m(change.x,_this.resizers.w);
 		}),
-		ne:new resizer_t(this.win,"resizer resizer_ne",function(change)
+		ne:new resizer_t(this.win,"resizer ne",function(change)
 		{
 			_this.grow_right_m(change.x,_this.resizers.ne);
 			_this.grow_top_m(change.y,_this.resizers.ne);
 		}),
-		se:new resizer_t(this.win,"resizer resizer_se",function(change)
+		se:new resizer_t(this.win,"resizer se",function(change)
 		{
 			_this.grow_right_m(change.x,_this.resizers.se);
 			_this.grow_bottom_m(change.y,_this.resizers.se);
 		}),
-		sw:new resizer_t(this.win,"resizer resizer_sw",function(change)
+		sw:new resizer_t(this.win,"resizer sw",function(change)
 		{
 			_this.grow_left_m(change.x,_this.resizers.sw);
 			_this.grow_bottom_m(change.y,_this.resizers.sw);
 		}),
-		nw:new resizer_t(this.win,"resizer resizer_nw",function(change)
+		nw:new resizer_t(this.win,"resizer nw",function(change)
 		{
 			_this.grow_left_m(change.x,_this.resizers.nw);
 			_this.grow_top_m(change.y,_this.resizers.nw);
@@ -75,17 +75,20 @@ function doorway_t(constrain,options)
 			_this.set_active(true);
 		});
 
-	//Set title.
-	this.bar_text=document.createElement("div");
-	this.bar.appendChild(this.bar_text);
-	this.bar_text.innerHTML=this.title="";
-	this.bar_text.className="doorway_bar_text";
-
 	//Make buttons.
-	this.button_offset=0;
 	this.buttons=[];
 	this.make_button_m("X",function(){_this.set_minimized(true);});
 	this.make_button_m("?",function(){alert("HELP! "+_this.title);});
+
+	//Set title.
+	this.bar_text=document.createElement("span");
+	this.bar.appendChild(this.bar_text);
+	this.bar_text.innerHTML=this.title="";
+	this.bar_text.className="doorway bar text";
+
+	//Create right side border.
+	this.bar_right_border=document.createElement("div");
+	this.bar.appendChild(this.bar_right_border);
 
 	//Event listeners...
 	this.resize_ev_m=function()
@@ -163,11 +166,7 @@ doorway_t.prototype.save=function()
 	{
 		title:this.title,
 		pos:utils.get_el_pos(this.win),
-		size:
-		{
-			w:utils.numify(this.win.offsetWidth),
-			h:utils.numify(this.win.offsetHeight)
-		},
+		size:utils.get_el_size(this.win),
 		active:this.active,
 		minimized:this.minimized
 	};
@@ -248,19 +247,21 @@ doorway_t.prototype.set_active=function(active)
 	if(active)
 	{
 		this.active=true;
-		this.win.className="doorway_win doorway_win_active";
-		this.bar.className="doorway_bar doorway_bar_active";
+		this.win.className="doorway win active";
+		this.bar.className="doorway bar active";
+		this.bar_right_border.className="doorway bar right_border active";
 		for(var key in this.buttons)
-			this.buttons[key].className="doorway_bar_button doorway_bar_button_active";
+			this.buttons[key].className="doorway bar button active";
 		this.win.style.zIndex="";
 	}
 	else
 	{
 		this.active=true;
-		this.win.className="doorway_win doorway_win_inactive";
-		this.bar.className="doorway_bar doorway_bar_inactive";
+		this.win.className="doorway win inactive";
+		this.bar.className="doorway bar inactive";
+		this.bar_right_border.className="doorway bar right_border inactive";
 		for(var key in this.buttons)
-			this.buttons[key].className="doorway_bar_button doorway_bar_button_inactive";
+			this.buttons[key].className="doorway bar button inactive";
 	}
 }
 
@@ -291,7 +292,6 @@ doorway_t.prototype.make_button_m=function(text,callback)
 	var button=document.createElement("button");
 	this.bar.appendChild(button);
 	button.innerHTML=text;
-	button.style.right=this.button_offset+"px";
 	var _this=this;
 
 	//Onclick event listener.
@@ -311,8 +311,7 @@ doorway_t.prototype.make_button_m=function(text,callback)
 	button.addEventListener("mousedown",no_drag);
 	button.addEventListener("touchstart",no_drag);
 
-	//Add to offset from right of window...
-	this.button_offset+=utils.get_el_size(button).w+5
+	//Add button...
 	this.buttons.push(button);
 }
 
