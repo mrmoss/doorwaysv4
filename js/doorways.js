@@ -118,7 +118,7 @@ function doorway_t(constrain,options)
 	this.constrain=constrain;
 	this.min_size=
 	{
-		w:200,
+		w:100,
 		h:200
 	};
 	this.active=false;
@@ -668,6 +668,8 @@ function doorway_menu_t(menu_div,constrain)
 			_this.handle.innerHTML=">";
 		}
 		_this.handle.className="doorway menu handle";
+		for(var key in _this.buttons)
+			_this.buttons[key].doorway.resize_ev_m();
 	});
 	this.handle.addEventListener("mouseenter",function()
 	{
@@ -696,6 +698,7 @@ doorway_menu_t.prototype.add_button=function(doorway)
 {
 	var button=document.createElement("div");
 	this.menu.appendChild(button);
+	button.doorway=doorway;
 	button.className="doorway menu button";
 	if(!this.visible)
 		button.style.visibility="hidden";
