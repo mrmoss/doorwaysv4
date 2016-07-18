@@ -6,12 +6,22 @@ html,head,body,.fill
 	padding:0px;
 }
 
+.fill
+{
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+}
+
 .doorway.win
 {
 	position:absolute;
 	background-color:white;
 	border-radius:5px;
 	overflow:hidden;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
 }
 
 .doorway.win.inactive
@@ -63,9 +73,6 @@ html,head,body,.fill
 {
 	padding:0px;
 	font-family:Sans-serif;
-	-webkit-user-select:none;
-	-moz-user-select:none;
-	-ms-user-select:none;
 }
 
 .doorway.bar.button

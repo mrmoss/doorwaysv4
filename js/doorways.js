@@ -1,7 +1,111 @@
 //doorways.js
 //Version 4
 //Mike Moss
-//07/16/2016
+//07/18/2016
+
+//Manages doorways.
+//  Appends and constrains windows to constrain.
+function doorway_manager_t(constrain)
+{
+	if(!constrain)
+		constrain=window;
+	this.constrain=constrain;
+	this.doorways={};
+}
+
+//Cleans up windows and manager.
+doorway_manager_t.prototype.destroy=function()
+{
+	for(var key in this.doorways)
+		this.doorways[key].destroy();
+	this.doorways=null;
+}
+
+//Adds a doorway under title and returns it.
+//  Note, if doorway exists, it is simply reloaded with given options.
+doorway_manager_t.prototype.add=function(options)
+{
+	if(!options)
+		options={};
+	if(!options.title)
+		return null;
+	if(!this.doorways[options.title])
+	{
+		var _this=this;
+		this.doorways[options.title]=new doorway_t(this.constrain);
+		this.doorways[options.title].addEventListener("active",
+			function(){_this.restack();});
+	}
+	this.doorways[options.title].load(options);
+	return this.doorways[options.title];
+}
+
+//Removes a doorway with the given title.
+doorway_manager_t.prototype.remove=function(title)
+{
+	var new_doorways={};
+	for(var key in this.doorways)
+		if(key!=title)
+			new_doorways[key]=this.doorways[key];
+		else
+			this.doorways[key].destroy();
+	this.doorways=new_doorways;
+	this.restack();
+
+}
+
+//Used to update window z-index ordering.
+doorway_manager_t.prototype.restack=function()
+{
+	//Sort windows by zIndex.
+	//  Note: Doesn't include new windows or top most window (zIndex=="").
+	var arr=[];
+	for(var key in this.doorways)
+		if(this.doorways[key].win.style.zIndex!="")
+			arr.push(this.doorways[key]);
+	arr.sort(function(lhs,rhs)
+	{
+		return lhs.win.style.zIndex>rhs.win.style.zIndex;
+	});
+
+	//Set zIndex, make inactive.
+	for(var ii=0;ii<arr.length;++ii)
+	{
+		arr[ii].win.style.zIndex=ii;
+		arr[ii].set_active(false);
+	}
+
+	//Set new windows.
+	var count=arr.length;
+	for(var key in this.doorways)
+		if(this.doorways[key].win.style.zIndex=="")
+			this.doorways[key].win.style.zIndex=count++;
+
+	//Set top most window to active if there were no new windows.
+	if(count==arr.length&&arr.length>0)
+		arr[arr.length-1].set_active(true);
+}
+
+//Saves windows into a JSON array of the save format specified in doorways.save().
+doorway_manager_t.prototype.save=function()
+{
+	var arr=[];
+	for(var key in this.doorways)
+	{
+		var data=this.doorways[key].save();
+		data.z=this.doorways[key].win.style.zIndex;
+		arr.push(data);
+	}
+	return arr;
+}
+
+//Loads windows from a JSON array of the save format specified in doorways.save().
+//  Note, does not delete old doorways before loading data.
+doorway_manager_t.prototype.load=function(data)
+{
+	for(var key in data)
+		this.add(data[key]);
+}
 
 //Creates a window.
 //  Appends and constrains window to constrain.
@@ -20,6 +124,9 @@ function doorway_t(constrain,options)
 	this.active=false;
 	this.minimized=false;
 	var _this=this;
+
+	//Client event_listeners.
+	this.event_listeners={active:[]};
 
 	//Create window and bar.
 	this.win=document.createElement("div");
@@ -117,6 +224,7 @@ function doorway_t(constrain,options)
 	};
 
 	window.addEventListener("resize",this.resize_ev_m);
+	this.win.addEventListener("mousedown",function(event){_this.set_active(true);});
 	this.bar.addEventListener("mousedown",function(event){_this.down_m(event);});
 	this.bar.addEventListener("touchstart",function(event){_this.down_m(event);});
 	this.move_ev_m=function(event){_this.move_m(event);};
@@ -151,10 +259,22 @@ doorway_t.prototype.destroy=function()
 	//Cleanup resizers.
 	if(this.resizers)
 	{
-		for(var ii in this.resizers)
-			this.resizers[ii].destroy();
+		for(var key in this.resizers)
+			this.resizers[key].destroy();
 		this.resizers=null;
 	}
+}
+
+//Add event listener member.
+doorway_t.prototype.addEventListener=function(listener,callback)
+{
+	utils.setEventListener(this,listener,callback);
+}
+
+//Remove event listener member.
+doorway_t.prototype.removeEventListener=function(listener,callback)
+{
+	utils.removeEventListener(this,listener,callback);
 }
 
 //Saves window into a JSON object.
@@ -253,10 +373,12 @@ doorway_t.prototype.set_active=function(active)
 		for(var key in this.buttons)
 			this.buttons[key].className="doorway bar button active";
 		this.win.style.zIndex="";
+		for(var key in this.event_listeners.active)
+			this.event_listeners.active[key](active);
 	}
 	else
 	{
-		this.active=true;
+		this.active=false;
 		this.win.className="doorway win inactive";
 		this.bar.className="doorway bar inactive";
 		this.bar_right_border.className="doorway bar right_border inactive";
@@ -398,7 +520,6 @@ doorway_t.prototype.down_m=function(event)
 		this.down_offset.x-=offset.x;
 		this.down_offset.y-=offset.y;
 		this.set_active(true);
-		this.win.style.zIndex="";
 	}
 };
 
