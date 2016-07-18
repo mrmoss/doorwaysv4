@@ -8,7 +8,7 @@
 function doorway_manager_t(constrain)
 {
 	if(!constrain)
-		constrain=window;
+		return null;
 	this.constrain=constrain;
 	this.doorways={};
 }
@@ -114,7 +114,7 @@ doorway_manager_t.prototype.load=function(data)
 function doorway_t(constrain,options)
 {
 	if(!constrain)
-		constrain=window;
+		return null;
 	this.constrain=constrain;
 	this.min_size=
 	{
@@ -607,7 +607,7 @@ doorway_resizer_t.prototype.down_m=function(event)
 	var offset=utils.get_el_pos(this.handle);
 	this.down_offset.x-=offset.x;
 	this.down_offset.y-=offset.y;
-};
+}
 
 //Mouse/touch move event listener.
 doorway_resizer_t.prototype.move_m=function(event)
@@ -618,11 +618,92 @@ doorway_resizer_t.prototype.move_m=function(event)
 		if(this.onmove)
 			this.onmove(pos);
 	}
-};
+}
 
 //Mouse/touch up listener.
 doorway_resizer_t.prototype.up_m=function(event)
 {
 	this.down_offset=null;
 	this.parent_offset=null;
-};
+}
+
+//Creaates the side menu for the doorways workspace.
+//  Menu div is where the menu is appended to.
+//  Constrain is where the doorways this menu controls are located.
+function doorway_menu_t(menu_div,constrain)
+{
+	if(!menu_div)
+		return null;
+	this.menu_div=menu_div;
+	this.constrain=constrain;
+	this.contrain_className=this.constrain.className;
+	var _this=this;
+	this.visible=false;
+	this.buttons=[];
+
+	this.menu=document.createElement("div");
+	this.menu_div.appendChild(this.menu);
+	this.menu.className="doorway menu visible";
+
+	this.handle=document.createElement("div");
+	this.menu.appendChild(this.handle);
+	this.handle.className="doorway menu handle inactive";
+	this.handle.addEventListener("click",function()
+	{
+		_this.visible=!_this.visible;
+		if(_this.visible)
+		{
+			_this.constrain.className="doorway area visible";
+			_this.menu.className="doorway menu visible";
+			for(var key in _this.buttons)
+				_this.buttons[key].style.visibility="visible";
+			_this.handle.innerHTML="<";
+		}
+		else
+		{
+			_this.constrain.className="doorway area hidden";
+			_this.menu.className="doorway menu hidden";
+			for(var key in _this.buttons)
+				_this.buttons[key].style.visibility="hidden";
+			_this.handle.innerHTML=">";
+		}
+		_this.handle.className="doorway menu handle";
+	});
+	this.handle.addEventListener("mouseenter",function()
+	{
+		_this.handle.className="doorway menu handle active";
+	});
+	this.handle.addEventListener("mouseleave",function()
+	{
+		_this.handle.className="doorway menu handle";
+	});
+	this.handle.click();
+}
+
+//Cleans up and removes this object.
+doorway_menu_t.prototype.destroy=function()
+{
+	if(this.constrain)
+		this.constrain.className=this.contrain_className;
+	if(this.menu_div)
+		this.menu_div.removeChild(this.menu);
+	this.constrain=this.contrain_className=this.menu_div=null;
+	this.menu=this.handle=this.buttons=null;
+}
+
+//Adds a doorway button.
+doorway_menu_t.prototype.add_button=function(doorway)
+{
+	var button=document.createElement("div");
+	this.menu.appendChild(button);
+	button.className="doorway menu button";
+	if(!this.visible)
+		button.style.visibility="hidden";
+	button.innerHTML=doorway.title;
+	button.addEventListener("click",function()
+	{
+		doorway.set_minimized(false);
+		doorway.set_active(true);
+	});
+	this.buttons.push(button);
+}

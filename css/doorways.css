@@ -1,23 +1,38 @@
-html,head,body,.fill
+html,head,body
 {
 	width: 100%;
 	height:100%;
-	margin: 0px;
+	margin:0px;
 	padding:0px;
 }
 
-.fill
+.doorway
 {
-	-webkit-user-select:none;
-	-moz-user-select:none;
-	-ms-user-select:none;
+	--border-radius:     5px;
+	--font-family:       Sans-serif;
+	--active-color:      rgb(50,100,250);
+	--active-color-alt:  rgb(255,255,255);
+	--inactive-color:    rgb(220,220,220);
+	--inactive-color-alt:rgb(100,100,100);
+
+	--menu-width:         200px;
+	--menu-handle-width:  32px;
+	--menu-button-height: 48px;
+	--menu-button-padding:5px;
+
+	--bar-height:        54px;
+	--bar-button-size:   20px;
+	--bar-button-spacing:5px;
+
+	--resizer-width: 20px;
+	--resizer-height:20px;
 }
 
 .doorway.win
 {
 	position:absolute;
 	background-color:white;
-	border-radius:5px;
+	border-radius:var(--border-radius);
 	overflow:hidden;
 	-webkit-user-select:none;
 	-moz-user-select:none;
@@ -26,25 +41,25 @@ html,head,body,.fill
 
 .doorway.win.inactive
 {
-	color:rgb(100,100,100);
-	-webkit-box-shadow:inset 0 0 0 1px rgb(220,220,220);
-	-moz-box-shadow:   inset 0 0 0 1px rgb(220,220,220);
-	box-shadow:        inset 0 0 0 1px rgb(220,220,220);
+	color:var(--inactive-color-alt);
+	-webkit-box-shadow:inset 0 0 0 1px var(--inactive-color);
+	-moz-box-shadow:   inset 0 0 0 1px var(--inactive-color);
+	box-shadow:        inset 0 0 0 1px var(--inactive-color);
 }
 
 .doorway.win.active
 {
-	color:rgb(255,255,255);
-	-webkit-box-shadow:inset 0 0 0 1px rgb(50,100,250);
-	-moz-box-shadow:   inset 0 0 0 1px rgb(50,100,250);
-	box-shadow:        inset 0 0 0 1px rgb(50,100,250);
+	color:var(--active-color-alt);
+	-webkit-box-shadow:inset 0 0 0 1px var(--active-color);
+	-moz-box-shadow:   inset 0 0 0 1px var(--active-color);
+	box-shadow:        inset 0 0 0 1px var(--active-color);
 }
 
 .doorway.bar
 {
-	height:     54px;
-	line-height:54px;
-	padding-left: 20px;
+	height:var(--bar-height);
+	line-height:var(--bar-height);
+	padding-left:var(--resizer-width);
 	white-space:nowrap;
 	cursor:move;
 }
@@ -56,53 +71,53 @@ html,head,body,.fill
 	padding:0px;
 	top:0px;
 	right:0px;
-	width:20px;
+	width:var(--resizer-width);
 }
 
 .doorway.bar.inactive
 {
-	background-color:rgb(220,220,220);
+	background-color:var(--inactive-color);
 }
 
 .doorway.bar.active
 {
-	background-color:rgb(50,100,250);
+	background-color:var(--active-color)
 }
 
 .doorway.bar.text
 {
 	padding:0px;
-	font-family:Sans-serif;
+	font-family:var(--font-family);
 }
 
 .doorway.bar.button
 {
-	width:      20px;
-	height:     20px;
-	line-height:20px;
-	margin-right:5px;
+	width:var(--bar-button-size);
+	height:var(--bar-button-size);
+	line-height:var(--bar-button-size);
+	margin-right:var(--bar-button-spacing);
 	padding:0px;
 	border:0px;
-	border-radius:5px;
+	border-radius:var(--border-radius);
 	cursor:pointer;
 }
 
 .doorway.bar.button.active
 {
-	color:rgb(255,255,255);
-	background-color:rgb(50,100,250);
+	color:var(--active-color-alt);
+	background-color:var(--active-color);
 }
 
 .doorway.bar.button.active:hover
 {
-	color:rgb(50,100,250);
-	background-color:rgb(255,255,255);
+	color:var(--active-color);
+	background-color:var(--active-color-alt);
 }
 
 .doorway.bar.button.inactive,.doorway.bar.button.inactive:hover
 {
-	color:rgb(100,100,100);
-	background-color:rgb(220,220,220);
+	color:var(--inactive-color-alt);
+	background-color:var(--inactive-color);
 	cursor:auto;
 }
 
@@ -111,8 +126,8 @@ html,head,body,.fill
 	position:absolute;
 	background-color:green;
 	opacity:0;
-	width:20px;
-	height:20px;
+	width:var(--resizer-width);
+	height:var(--resizer-height);
 }
 
 .doorway.resizer.n
@@ -177,4 +192,89 @@ html,head,body,.fill
 	top:0px;
 	left:0px;
 	background-color:purple;
+}
+
+.doorway.area
+{
+	position:absolute;
+	top:0px;
+	height:100%;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+}
+
+.doorway.area.visible
+{
+	left:var(--menu-width);
+	width:calc(100% - var(--menu-width));
+}
+
+.doorway.area.hidden
+{
+	left:var(--menu-handle-width);
+	width:calc(100% - var(--menu-handle-width));
+}
+
+.doorway.menu
+{
+	height:100%;
+}
+
+.doorway.menu.visible
+{
+	position:relative;
+	display:table;
+	vertical-align:middle;
+	width:var(--menu-width);
+}
+
+.doorway.menu.hidden
+{
+	position:relative;
+	width:var(--menu-handle-width);
+}
+
+.doorway.menu.handle
+{
+	position:absolute;
+	line-height:100vh;
+	right:0px;
+	width:var(--menu-handle-width);
+	border-radius:0px var(--border-radius) var(--border-radius) 0px;
+	text-align:center;
+	font-family:var(--font-family);
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	cursor:default;
+	background-color:var(--inactive-color);
+	color:var(--inactive-color-alt);
+}
+
+.doorway.menu.handle.active
+{
+	background-color:var(--active-color);
+	color:var(--active-color-alt);
+}
+
+.doorway.menu.button
+{
+	width:calc(var(--menu-width) - var(--menu-handle-width));
+	height:var(--menu-button-height);
+	line-height:var(--menu-button-height);
+	padding-left:var(--menu-button-padding);
+	font-family:var(--font-family);
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	cursor:default;
+	background-color:var(--active-color-alt);
+	color:var(--inactive-color-alt);
+}
+
+.doorway.menu.button:hover
+{
+	background-color:var(--active-color);
+	color:var(--active-color-alt);
 }

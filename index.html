@@ -3,17 +3,16 @@
 	<meta name="HandheldFriendly" content="true"/>
 	<head>
 		<link rel="stylesheet" href="css/doorways.css">
-
-		<div id="constrain" class="fill">
-			<button id="1">1</button>
-			<button id="2">2</button>
-		</div>
+		<div id="menu"></div>
+		<div id="constrain"></div>
 
 		<script src="js/doorways.js"></script>
 		<script src="js/utils.js"></script>
 		<script>
+			var menu_div=document.getElementById("menu");
 			var constrain=document.getElementById("constrain");
 			var manager=new doorway_manager_t(constrain);
+			var menu=new doorway_menu_t(menu_div,constrain);
 
 			var t1=manager.add
 			({
@@ -44,20 +43,8 @@
 				},
 				active:true
 			});
-			console.log(JSON.stringify(manager.save()));
-
-			var b1=document.getElementById("1");
-			b1.onclick=function()
-			{
-				t1.set_minimized(false);
-				t1.set_active(true);
-			};
-			var b2=document.getElementById("2");
-			b2.onclick=function()
-			{
-				t2.set_minimized(false);
-				t2.set_active(true);
-			};
+			menu.add_button(t1);
+			menu.add_button(t2);
 		</script>
 	</head>
 	<body>
