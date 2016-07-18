@@ -137,38 +137,38 @@ function doorway_t(constrain,options)
 	//Create resizers.
 	this.resizers=
 	{
-		n:new resizer_t(this.win,"resizer n",function(change)
+		n:new doorway_resizer_t(this.win,"doorway resizer n",function(change)
 		{
 			_this.grow_top_m(change.y,_this.resizers.n);
 		}),
-		e:new resizer_t(this.win,"resizer e",function(change)
+		e:new doorway_resizer_t(this.win,"doorway resizer e",function(change)
 		{
 			_this.grow_right_m(change.x,_this.resizers.e);
 		}),
-		s:new resizer_t(this.win,"resizer s",function(change)
+		s:new doorway_resizer_t(this.win,"doorway resizer s",function(change)
 		{
 			_this.grow_bottom_m(change.y,_this.resizers.s);
 		}),
-		w:new resizer_t(this.win,"resizer w",function(change)
+		w:new doorway_resizer_t(this.win,"doorway resizer w",function(change)
 		{
 			_this.grow_left_m(change.x,_this.resizers.w);
 		}),
-		ne:new resizer_t(this.win,"resizer ne",function(change)
+		ne:new doorway_resizer_t(this.win,"doorway resizer ne",function(change)
 		{
 			_this.grow_right_m(change.x,_this.resizers.ne);
 			_this.grow_top_m(change.y,_this.resizers.ne);
 		}),
-		se:new resizer_t(this.win,"resizer se",function(change)
+		se:new doorway_resizer_t(this.win,"doorway resizer se",function(change)
 		{
 			_this.grow_right_m(change.x,_this.resizers.se);
 			_this.grow_bottom_m(change.y,_this.resizers.se);
 		}),
-		sw:new resizer_t(this.win,"resizer sw",function(change)
+		sw:new doorway_resizer_t(this.win,"doorway resizer sw",function(change)
 		{
 			_this.grow_left_m(change.x,_this.resizers.sw);
 			_this.grow_bottom_m(change.y,_this.resizers.sw);
 		}),
-		nw:new resizer_t(this.win,"resizer nw",function(change)
+		nw:new doorway_resizer_t(this.win,"doorway resizer nw",function(change)
 		{
 			_this.grow_left_m(change.x,_this.resizers.nw);
 			_this.grow_top_m(change.y,_this.resizers.nw);
@@ -544,7 +544,7 @@ doorway_t.prototype.up_m=function(event)
 //  onmove({x:INT,y:INT}) - Called when clicked on, passes coordinates of click.
 //  Event listeners:
 //  down(event) - Called when the the handle is pressed or touched.
-function resizer_t(parent,className,onmove)
+function doorway_resizer_t(parent,className,onmove)
 {
 	if(!parent)
 		return null;
@@ -569,7 +569,7 @@ function resizer_t(parent,className,onmove)
 
 
 //Cleans up resizer.
-resizer_t.prototype.destroy=function()
+doorway_resizer_t.prototype.destroy=function()
 {
 	var _this=this;
 	if(this.parent)
@@ -584,19 +584,19 @@ resizer_t.prototype.destroy=function()
 }
 
 //Add event listener member.
-resizer_t.prototype.addEventListener=function(listener,callback)
+doorway_resizer_t.prototype.addEventListener=function(listener,callback)
 {
 	utils.setEventListener(this,listener,callback);
 }
 
 //Remove event listener member.
-resizer_t.prototype.removeEventListener=function(listener,callback)
+doorway_resizer_t.prototype.removeEventListener=function(listener,callback)
 {
 	utils.removeEventListener(this,listener,callback);
 }
 
 //Mouse/touch down event listener.
-resizer_t.prototype.down_m=function(event)
+doorway_resizer_t.prototype.down_m=function(event)
 {
 	event.preventDefault();
 	for(var key in this.event_listeners.down)
@@ -608,7 +608,7 @@ resizer_t.prototype.down_m=function(event)
 };
 
 //Mouse/touch move event listener.
-resizer_t.prototype.move_m=function(event)
+doorway_resizer_t.prototype.move_m=function(event)
 {
 	if(this.down_offset)
 	{
@@ -619,7 +619,7 @@ resizer_t.prototype.move_m=function(event)
 };
 
 //Mouse/touch up listener.
-resizer_t.prototype.up_m=function(event)
+doorway_resizer_t.prototype.up_m=function(event)
 {
 	this.down_offset=null;
 	this.parent_offset=null;
