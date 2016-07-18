@@ -200,11 +200,12 @@ function doorway_t(constrain,options)
 	//Event listeners...
 	this.resize_ev_m=function()
 	{
-		//Move and resize.
-		_this.load(_this.save());
+		if(_this.minimized)
+			return;
 
 		//Get current size and parent's size.
 		var save=_this.save();
+
 		var parent_size=utils.get_el_size(this.constrain);
 
 		//Constrain.
@@ -400,6 +401,7 @@ doorway_t.prototype.set_minimized=function(minimized)
 	{
 		this.minimized=false;
 		this.win.style.visibility="visible";
+		this.resize_ev_m();
 	}
 }
 
