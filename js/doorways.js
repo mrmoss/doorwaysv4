@@ -653,16 +653,16 @@ function doorway_menu_t(menu_div,constrain)
 		_this.visible=!_this.visible;
 		if(_this.visible)
 		{
-			_this.constrain.className="doorway area visible";
-			_this.menu.className="doorway menu visible";
+			_this.constrain.className="doorway area opened";
+			_this.menu.className="doorway menu opened";
 			for(var key in _this.buttons)
 				_this.buttons[key].style.visibility="visible";
 			_this.handle.innerHTML="<";
 		}
 		else
 		{
-			_this.constrain.className="doorway area hidden";
-			_this.menu.className="doorway menu hidden";
+			_this.constrain.className="doorway area closed";
+			_this.menu.className="doorway menu closed";
 			for(var key in _this.buttons)
 				_this.buttons[key].style.visibility="hidden";
 			_this.handle.innerHTML=">";

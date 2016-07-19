@@ -1,11 +1,3 @@
-html,head,body
-{
-	width: 100%;
-	height:100%;
-	margin:0px;
-	padding:0px;
-}
-
 .doorway
 {
 	--border-radius:     5px;
@@ -204,13 +196,13 @@ html,head,body
 	-ms-user-select:none;
 }
 
-.doorway.area.visible
+.doorway.area.opened
 {
 	left:var(--menu-width);
 	width:calc(100% - var(--menu-width));
 }
 
-.doorway.area.hidden
+.doorway.area.closed
 {
 	left:var(--menu-handle-width);
 	width:calc(100% - var(--menu-handle-width));
@@ -221,7 +213,7 @@ html,head,body
 	height:100%;
 }
 
-.doorway.menu.visible
+.doorway.menu.opened
 {
 	position:relative;
 	display:table;
@@ -229,7 +221,7 @@ html,head,body
 	width:var(--menu-width);
 }
 
-.doorway.menu.hidden
+.doorway.menu.closed
 {
 	position:relative;
 	width:var(--menu-handle-width);
