@@ -210,49 +210,40 @@
 
 .doorway.menu
 {
+	position:relative;
 	height:100%;
+	overflow:hidden;
 }
 
 .doorway.menu.opened
 {
-	position:relative;
-	display:table;
-	vertical-align:middle;
 	width:var(--menu-width);
 }
 
 .doorway.menu.closed
 {
-	position:relative;
 	width:var(--menu-handle-width);
 }
 
-.doorway.menu.handle
+.doorway.menu.button_area
 {
-	position:absolute;
-	line-height:100vh;
-	right:0px;
-	width:var(--menu-handle-width);
-	border-radius:0px var(--border-radius) var(--border-radius) 0px;
-	text-align:center;
-	font-family:var(--font-family);
-	-webkit-user-select:none;
-	-moz-user-select:none;
-	-ms-user-select:none;
-	cursor:default;
-	background-color:var(--inactive-color);
-	color:var(--inactive-color-alt);
+	width:calc(var(--menu-width) - var(--menu-handle-width));
+	overflow-y:auto;
 }
 
-.doorway.menu.handle.active
+.doorway.menu.button_area.opened
 {
-	background-color:var(--active-color);
-	color:var(--active-color-alt);
+	visibility:visible;
+}
+
+.doorway.menu.button_area.closed
+{
+	visibility:hidden;
 }
 
 .doorway.menu.button
 {
-	width:calc(var(--menu-width) - var(--menu-handle-width));
+	width:100%;
 	height:var(--menu-button-height);
 	line-height:var(--menu-button-height);
 	padding-left:var(--menu-button-padding);
@@ -268,5 +259,39 @@
 .doorway.menu.button:hover
 {
 	background-color:var(--active-color);
+	color:var(--active-color-alt);
+}
+
+.doorway.menu.handle
+{
+	position:absolute;
+	right:0px;
+	top:0px;
+	width:var(--menu-handle-width);
+	border-radius:0px var(--border-radius) var(--border-radius) 0px;
+	text-align:center;
+	font-family:var(--font-family);
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	cursor:default;
+	background-color:var(--inactive-color);
+}
+
+.doorway.menu.handle.active
+{
+	background-color:var(--active-color);
+}
+
+.doorway.menu.handle.text
+{
+	background-color:rgba(0,0,0,0);
+	position:absolute;
+	top:50%;
+	color:var(--inactive-color-alt);
+}
+
+.doorway.menu.handle.text.active
+{
 	color:var(--active-color-alt);
 }

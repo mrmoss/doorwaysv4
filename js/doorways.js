@@ -632,19 +632,30 @@ doorway_resizer_t.prototype.up_m=function(event)
 //  Constrain is where the doorways this menu controls are located.
 function doorway_menu_t(menu_div,constrain)
 {
-	if(!menu_div)
+	if(!menu_div||!constrain)
 		return null;
-	this.menu_div=menu_div;
+
+	//Store constrain (we change it's class...unchange on destroy).
 	this.constrain=constrain;
 	this.contrain_className=this.constrain.className;
-	var _this=this;
+
+	//Other variables...
+	this.menu_div=menu_div;
 	this.visible=false;
+	var _this=this;
+
+	//Store our buttons (needed?)
 	this.buttons=[];
 
+	//Main menu div.
 	this.menu=document.createElement("div");
 	this.menu_div.appendChild(this.menu);
-	this.menu.className="doorway menu visible";
 
+	//Create div where buttons are.
+	this.button_area=document.createElement("div");
+	this.menu.appendChild(this.button_area);
+
+	//Create right side expand handle.
 	this.handle=document.createElement("div");
 	this.menu.appendChild(this.handle);
 	this.handle.className="doorway menu handle inactive";
@@ -655,30 +666,40 @@ function doorway_menu_t(menu_div,constrain)
 		{
 			_this.constrain.className="doorway area opened";
 			_this.menu.className="doorway menu opened";
-			for(var key in _this.buttons)
-				_this.buttons[key].style.visibility="visible";
-			_this.handle.innerHTML="<";
+			_this.button_area.className="doorway menu button_area opened";
+			_this.handle_text.innerHTML="<";
 		}
 		else
 		{
 			_this.constrain.className="doorway area closed";
 			_this.menu.className="doorway menu closed";
-			for(var key in _this.buttons)
-				_this.buttons[key].style.visibility="hidden";
-			_this.handle.innerHTML=">";
+			_this.button_area.className="doorway menu button_area closed";
+			_this.handle_text.innerHTML=">";
 		}
 		_this.handle.className="doorway menu handle";
+		_this.handle_text.className="doorway menu handle text";
 		for(var key in _this.buttons)
 			_this.buttons[key].doorway.resize_ev_m();
 	});
+
+	//Arrow on right side handle.
+	this.handle_text=document.createElement("span");
+	this.handle.appendChild(this.handle_text);
+	this.handle_text.className="doorway menu handle text";
+
+	//Right side handle event highlight event listeners.
 	this.handle.addEventListener("mouseenter",function()
 	{
 		_this.handle.className="doorway menu handle active";
+		_this.handle_text.className="doorway menu handle text active";
 	});
 	this.handle.addEventListener("mouseleave",function()
 	{
 		_this.handle.className="doorway menu handle";
+		_this.handle_text.className="doorway menu handle text";
 	});
+
+	//Click handle to set colors and such.
 	this.handle.click();
 }
 
@@ -690,18 +711,16 @@ doorway_menu_t.prototype.destroy=function()
 	if(this.menu_div)
 		this.menu_div.removeChild(this.menu);
 	this.constrain=this.contrain_className=this.menu_div=null;
-	this.menu=this.handle=this.buttons=null;
+	this.menu=this.button_area=this.handle=this.buttons=null;
 }
 
 //Adds a doorway button.
 doorway_menu_t.prototype.add_button=function(doorway)
 {
 	var button=document.createElement("div");
-	this.menu.appendChild(button);
+	this.button_area.appendChild(button);
 	button.doorway=doorway;
 	button.className="doorway menu button";
-	if(!this.visible)
-		button.style.visibility="hidden";
 	button.innerHTML=doorway.title;
 	button.addEventListener("click",function()
 	{
