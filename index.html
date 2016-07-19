@@ -13,42 +13,42 @@
 			}
 		</style>
 		<div id="constrain"></div>
-
 		<script src="js/doorways.js"></script>
 		<script src="js/utils.js"></script>
 		<script>
 			var constrain=document.getElementById("constrain");
 			var manager=new doorway_manager_t(constrain);
-
-			var t1=manager.add
-			({
-				title:"Test",
-				size:
+			manager.load
+			([
 				{
-					w:200,
-					h:200
-				},
-				pos:
-				{
-					x:0,
-					y:32
+					title:"Test",
+					size:
+					{
+						w:200,
+						h:200
+					},
+					pos:
+					{
+						x:0,
+						y:32
+					}
 				}
-			});
-			var t2=manager.add
-			({
-				title:"Test2",
-				size:
+				,
 				{
-					w:200,
-					h:200
-				},
-				pos:
-				{
-					x:200,
-					y:32
-				},
-				active:true
-			});
+					title:"Test2",
+					size:
+					{
+						w:200,
+						h:200
+					},
+					pos:
+					{
+						x:200,
+						y:32
+					},
+					active:true
+				}
+			]);
 		</script>
 	</head>
 	<body>
