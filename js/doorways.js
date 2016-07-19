@@ -206,7 +206,7 @@ function doorway_t(constrain,options)
 		//Get current size and parent's size.
 		var save=_this.save();
 
-		var parent_size=utils.get_el_size(this.constrain);
+		var parent_size=utils.get_el_size(_this.constrain);
 
 		//Constrain.
 		if(save.pos.x<0)
