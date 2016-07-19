@@ -12,16 +12,13 @@
 				padding:0px;
 			}
 		</style>
-		<div id="menu"></div>
 		<div id="constrain"></div>
 
 		<script src="js/doorways.js"></script>
 		<script src="js/utils.js"></script>
 		<script>
-			var menu_div=document.getElementById("menu");
 			var constrain=document.getElementById("constrain");
 			var manager=new doorway_manager_t(constrain);
-			var menu=new doorway_menu_t(menu_div,constrain);
 
 			var t1=manager.add
 			({
@@ -52,8 +49,6 @@
 				},
 				active:true
 			});
-			menu.add_button(t1);
-			menu.add_button(t2);
 		</script>
 	</head>
 	<body>

@@ -252,12 +252,29 @@
 	-moz-user-select:none;
 	-ms-user-select:none;
 	cursor:default;
-	background-color:var(--active-color-alt);
+}
+
+.doorway.menu.button.inactive
+{
 	color:var(--inactive-color-alt);
 }
 
-.doorway.menu.button:hover
+.doorway.menu.button.inactive:hover
 {
+	cursor:pointer;
+	background-color:var(--active-color);
+	color:var(--active-color-alt);
+}
+
+.doorway.menu.button.active
+{
+	background-color:var(--inactive-color);
+	color:var(--inactive-color-alt);
+}
+
+.doorway.menu.button.active:hover
+{
+	cursor:pointer;
 	background-color:var(--active-color);
 	color:var(--active-color-alt);
 }
@@ -280,6 +297,7 @@
 
 .doorway.menu.handle.active
 {
+	cursor:pointer;
 	background-color:var(--active-color);
 }
 

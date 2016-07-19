@@ -10,15 +10,34 @@ function doorway_manager_t(constrain)
 	if(!constrain)
 		return null;
 	this.constrain=constrain;
+	this.menu_div=document.createElement("div");
+	this.constrain.appendChild(this.menu_div);
+	this.doorway_div=document.createElement("div");
+	this.constrain.appendChild(this.doorway_div);
+	this.menu=new doorway_menu_t(this.menu_div,this.doorway_div);
 	this.doorways={};
 }
 
 //Cleans up windows and manager.
 doorway_manager_t.prototype.destroy=function()
 {
-	for(var key in this.doorways)
-		this.doorways[key].destroy();
-	this.doorways=null;
+	if(this.menu)
+	{
+		this.menu.destroy();
+		this.menu=null;
+	}
+	if(this.doorways)
+	{
+		for(var key in this.doorways)
+			this.doorways[key].destroy();
+		this.doorways=null;
+	}
+	if(this.constrain)
+	{
+		this.constrain.removeChild(this.menu_div);
+		this.constrain.removeChild(this.doorway_div);
+		this.constrain=this.menu_div=this.doorway_div=null;
+	}
 }
 
 //Adds a doorway under title and returns it.
@@ -32,17 +51,19 @@ doorway_manager_t.prototype.add=function(options)
 	if(!this.doorways[options.title])
 	{
 		var _this=this;
-		this.doorways[options.title]=new doorway_t(this.constrain);
+		this.doorways[options.title]=new doorway_t(this.doorway_div);
 		this.doorways[options.title].addEventListener("active",
 			function(){_this.restack();});
 	}
 	this.doorways[options.title].load(options);
+	this.menu.add(this.doorways[options.title]);
 	return this.doorways[options.title];
 }
 
 //Removes a doorway with the given title.
 doorway_manager_t.prototype.remove=function(title)
 {
+	this.menu.remove(title);
 	var new_doorways={};
 	for(var key in this.doorways)
 		if(key!=title)
@@ -51,7 +72,6 @@ doorway_manager_t.prototype.remove=function(title)
 			this.doorways[key].destroy();
 	this.doorways=new_doorways;
 	this.restack();
-
 }
 
 //Used to update window z-index ordering.
@@ -126,7 +146,7 @@ function doorway_t(constrain,options)
 	var _this=this;
 
 	//Client event_listeners.
-	this.event_listeners={active:[]};
+	this.event_listeners={active:[],inactive:[]};
 
 	//Create window and bar.
 	this.win=document.createElement("div");
@@ -275,7 +295,7 @@ doorway_t.prototype.addEventListener=function(listener,callback)
 //Remove event listener member.
 doorway_t.prototype.removeEventListener=function(listener,callback)
 {
-	utils.removeEventListener(this,listener,callback);
+	utils.unsetEventListener(this,listener,callback);
 }
 
 //Saves window into a JSON object.
@@ -375,7 +395,7 @@ doorway_t.prototype.set_active=function(active)
 			this.buttons[key].className="doorway bar button active";
 		this.win.style.zIndex="";
 		for(var key in this.event_listeners.active)
-			this.event_listeners.active[key](active);
+			this.event_listeners.active[key]();
 	}
 	else
 	{
@@ -385,6 +405,8 @@ doorway_t.prototype.set_active=function(active)
 		this.bar_right_border.className="doorway bar right_border inactive";
 		for(var key in this.buttons)
 			this.buttons[key].className="doorway bar button inactive";
+		for(var key in this.event_listeners.inactive)
+			this.event_listeners.inactive[key]();
 	}
 }
 
@@ -594,7 +616,7 @@ doorway_resizer_t.prototype.addEventListener=function(listener,callback)
 //Remove event listener member.
 doorway_resizer_t.prototype.removeEventListener=function(listener,callback)
 {
-	utils.removeEventListener(this,listener,callback);
+	utils.unsetEventListener(this,listener,callback);
 }
 
 //Mouse/touch down event listener.
@@ -644,8 +666,8 @@ function doorway_menu_t(menu_div,constrain)
 	this.visible=false;
 	var _this=this;
 
-	//Store our buttons (needed?)
-	this.buttons=[];
+	//Store our buttons.
+	this.buttons={};
 
 	//Main menu div.
 	this.menu=document.createElement("div");
@@ -679,7 +701,8 @@ function doorway_menu_t(menu_div,constrain)
 		_this.handle.className="doorway menu handle";
 		_this.handle_text.className="doorway menu handle text";
 		for(var key in _this.buttons)
-			_this.buttons[key].doorway.resize_ev_m();
+			if(_this.buttons[key]&&_this.buttons[key].doorway)
+				_this.buttons[key].doorway.resize_ev_m();
 	});
 
 	//Arrow on right side handle.
@@ -715,17 +738,53 @@ doorway_menu_t.prototype.destroy=function()
 }
 
 //Adds a doorway button.
-doorway_menu_t.prototype.add_button=function(doorway)
+doorway_menu_t.prototype.add=function(doorway)
 {
-	var button=document.createElement("div");
-	this.button_area.appendChild(button);
-	button.doorway=doorway;
-	button.className="doorway menu button";
-	button.innerHTML=doorway.title;
-	button.addEventListener("click",function()
+	if(!doorway)
+		return;
+	if(!this.buttons[doorway.title])
 	{
-		doorway.set_minimized(false);
-		doorway.set_active(true);
-	});
-	this.buttons.push(button);
+		var button=document.createElement("div");
+		this.button_area.appendChild(button);
+		button.doorway=doorway;
+		if(doorway.active)
+			button.className="doorway menu button active";
+		else
+			button.className="doorway menu button inactive";
+		button.active_func=function()
+		{
+			button.className="doorway menu button active";
+		};
+		doorway.addEventListener("active",button.active_func);
+		button.inactive_func=function()
+		{
+			button.className="doorway menu button inactive";
+		};
+		doorway.addEventListener("inactive",button.inactive_func);
+		button.innerHTML=doorway.title;
+		button.addEventListener("click",function()
+		{
+			doorway.set_minimized(false);
+			doorway.set_active(true);
+		});
+		this.buttons[doorway.title]=button;
+	}
+}
+
+//Removes a doorway button with the given title.
+doorway_menu_t.prototype.remove=function(title)
+{
+	var new_buttons={};
+	for(var key in this.buttons)
+		if(key!=title)
+		{
+			new_buttons[key]=this.buttons[key];
+		}
+		else
+		{
+			this.buttons[key].doorway.removeEventListener("active",this.buttons[key].active_func);
+			this.buttons[key].doorway.removeEventListener("inactive",this.buttons[key].inactive_func);
+			this.button_area.removeChild(this.buttons[key]);
+		}
+	this.buttons=new_buttons;
 }
