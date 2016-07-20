@@ -1,7 +1,7 @@
 //doorways.js
 //Version 4
 //Mike Moss
-//07/18/2016
+//07/19/2016
 
 //Manages doorways.
 //  Appends and constrains windows to constrain.
@@ -308,6 +308,7 @@ doorway_t.prototype.save=function()
 		title:this.title,
 		pos:utils.get_el_pos(this.win),
 		size:utils.get_el_size(this.win),
+		min_size:this.min_size,
 		active:this.active,
 		minimized:this.minimized
 	};
@@ -326,6 +327,13 @@ doorway_t.prototype.load=function(data)
 	this.set_minimized(data_copy.minimized);
 	this.set_active(data_copy.active);
 	this.bar_text.innerHTML=this.title=data_copy.title;
+	if(!data.min_size)
+		data.min_size=this.min_size;
+	if(data.min_size.w!=0&&!data.min_size.w)
+		data.min_size.w=this.min_size.w;
+	if(data.min_size.h!=0&&!data.min_size.h)
+		data.min_size.h=this.min_size.h;
+	this.min_size=data.min_size;
 	this.resize(data.size);
 	this.move(data.pos);
 }
